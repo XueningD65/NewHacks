@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.messagebox
 import sql_login as sl
+import face_confirm as fc
 
 #create a database for the app
 sl.new_data()
@@ -19,6 +20,7 @@ def validify():
             tkinter.messagebox.showinfo(parent = login,title='Login info', message='Succesful')
             name.delete(0, tk.END)
             pwd.delete(0,tk.END)
+            fc.create(e_name,login)
         else:
             tkinter.messagebox.showwarning(parent = login,title='Login info', message='Invalid password')
             pwd.delete(0, tk.END)
