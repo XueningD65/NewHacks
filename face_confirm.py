@@ -6,12 +6,22 @@ def create(name,login):
     def show_frame():
         _, frame = cap.read()
         frame = cv2.flip(frame, 1)
+
+        # Convert to grayscale
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # Detect the faces
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        # Draw the rectangle around each face
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
         imgtk = ImageTk.PhotoImage(image=img)
+
         lmain.imgtk = imgtk
         lmain.configure(image=imgtk)
-        lmain.after(10, show_frame)
+        lmain.after(3, show_frame)
 
     login.destroy()
 
@@ -19,6 +29,8 @@ def create(name,login):
     root.bind('<Escape>', lambda e: root.quit())
     lmain = tk.Label(root)
     lmain.pack()
+
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     width, height = 800, 600
     cap = cv2.VideoCapture(0)
