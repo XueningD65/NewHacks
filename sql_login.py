@@ -69,9 +69,10 @@ def get_identity(name):
     return id
 
 def get_teammate_name():
+    name = []
     for row in c.execute("SELECT username FROM login WHERE identity = ?;", ('Teammate',)):
-        print(row[0])
-
+        name.append(row[0])
+    return name
     # print(img)
     #return c.fetchall()
 
