@@ -127,6 +127,7 @@ def create(name,login):
             return
         else:
             print("Do not cheat!")
+            show_frame()
 
     login.destroy()
     root = tk.Tk()
