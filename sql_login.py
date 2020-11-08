@@ -15,7 +15,7 @@ def new_data():
     if (c.fetchone()[0] == 1):
         print("Table exists.")
     else:
-        c.execute('''CREATE TABLE login (username text, pwd text, photo_path text)''')
+        c.execute('''CREATE TABLE login (username text, pwd text, photo_path text, identity text)''')
         conn.commit()
 
 def validify_name(name):
@@ -39,7 +39,7 @@ def validify_password(name, pwd):
         return False
 
 
-def registration(name, pwd, image):
+def registration(name, pwd, image, identity):
     c.execute("SELECT rowid FROM login WHERE username = ?;", [name])
     data = c.fetchall()
 
@@ -48,9 +48,7 @@ def registration(name, pwd, image):
         print("Creating new account...")
         for row in c.execute('SELECT * FROM login'):
             print(row)
-        c.execute("INSERT INTO login VALUES (?,?,?)", (name, pwd, image))
-
-
+        c.execute("INSERT INTO login VALUES (?,?,?)", (name, pwd, image,identity))
 
         conn.commit()
         return True
@@ -59,8 +57,27 @@ def registration(name, pwd, image):
         return False
 
 def get_photo(name):
-
     c.execute("SELECT photo_path FROM login WHERE username = ?;", (name,))
     img = c.fetchone()[0]
     #print(img)
     return img
+
+def get_identity(name):
+    c.execute("SELECT identity FROM login WHERE username = ?;", (name,))
+    id = c.fetchone()[0]
+    # print(img)
+    return id
+
+def get_teammate_name():
+    for row in c.execute("SELECT name FROM login WHERE identity = ?;", ("teammate",)):
+        print(row)
+
+    # print(img)
+    return c.fetchall()
+
+def get_leader_name():
+    for row in c.execute("SELECT name FROM login WHERE identity = ?;", ("leader",)):
+        print(row)
+
+    # print(img)
+    return c.fetchall()
