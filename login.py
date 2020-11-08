@@ -54,7 +54,26 @@ def register():
             global image
             image = pic
             image = cv2.resize(image, (512, 256 + 128))
+
+            face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            # Detect faces
+            faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+            run = 0
+            for (x, y, w, h) in faces:
+                run = run+1
+                cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            # Display the output
+            cv2.imshow('Press any key to confirm', image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
             photo_window.destroy()
+
+            if run==0:
+                print("Error! No human face recognized!")
+                tkinter.messagebox.showwarning(parent=reg_window, title='Photo warning', message='No human face detected! Please retake a photo!')
+
 
         def show_frame():
             _, frame = cap.read()
