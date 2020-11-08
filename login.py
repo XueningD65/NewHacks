@@ -1,14 +1,21 @@
 import tkinter as tk
 import tkinter.messagebox
+import tkinter.filedialog
 import sql_login as sl
+import cv2
 import face_confirm as fc
+import io
+from PIL import Image, ImageTk
+
+image_prefix = "./images/"
+image_suffix = ".jpg"
 
 #create a database for the app
 sl.new_data()
 
 def call_back():
     validify()
-    login.destroy()
+    #login.destroy()
 
 def validify():
     #test if the entries are valid
@@ -20,6 +27,7 @@ def validify():
             tkinter.messagebox.showinfo(parent = login,title='Login info', message='Succesful')
             name.delete(0, tk.END)
             pwd.delete(0,tk.END)
+
             fc.create(e_name,login)
         else:
             tkinter.messagebox.showwarning(parent = login,title='Login info', message='Invalid password')
@@ -31,6 +39,14 @@ def validify():
         pwd.delete(0, tk.END)
 
 def register():
+
+    def upload_image():
+        path = tk.filedialog.askopenfilename()
+        if(len(path)>0):
+            global image
+            image = cv2.imread(path)
+            image = cv2.resize(image, (256,256))
+
     def info_check():
         e_name = entry_name.get()
         e_pwd = entry_pwd.get()
@@ -38,7 +54,10 @@ def register():
         if(e_pwd != e_confirm):
             tkinter.messagebox.showwarning(title='Register info', message='Password does not match\nPlease enter again')
         else:
-            if(sl.registration(e_name, e_pwd)):
+            img_path = image_prefix + e_name + image_suffix
+            cv2.imwrite(img_path, image)
+
+            if(sl.registration(e_name, e_pwd, img_path)):
                 tkinter.messagebox.showinfo(title='Register info', message='Succesfully registered.\nPlease login')
                 reg_window.destroy()
                 return
@@ -46,9 +65,7 @@ def register():
                 tkinter.messagebox.showwarning(title='Register info',
                                                message='Username already exists\nPlease enter again')
 
-        entry_name.delete(0, tk.END)
-        entry_pwd.delete(0, tk.END)
-        entry_confirm.delete(0, tk.END)
+        reset()
 
     def reset():
         entry_name.delete(0,tk.END)
@@ -73,6 +90,13 @@ def register():
     label_confirm = tk.Label(reg_window, text="Confirm Password").grid(row=2, column=0)
     entry_confirm = tk.Entry(reg_window, show="*")
     entry_confirm.grid(row=2, column=1, padx=10, pady=5)
+
+    new_photo = tk.StringVar()
+    label_photo = tk.Label(reg_window, text="Add a photo").grid(row=3, column=0)
+    button_upload = tk.Button(reg_window, text = "Upload a photo", width = 10, command = upload_image)
+    button_upload.grid(row=3,column=1, padx=10,pady=5)
+    button_take = tk.Button(reg_window, text = "Take now", width = 10, command = upload_image)
+    button_take.grid(row=3, column=2, padx=10, pady=5)
 
     b_1 = tk.Button(reg_window, text="Sign Up", width=10, command=info_check).grid(row=4, column=0, sticky=tk.W, padx=10,
                                                                                  pady=5)

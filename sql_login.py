@@ -1,4 +1,10 @@
 import sqlite3
+import cv2
+from PIL import Image, ImageTk
+import numpy as np
+import io
+import base64
+import json
 
 conn = sqlite3.connect('app_data.db')
 c = conn.cursor()
@@ -9,7 +15,7 @@ def new_data():
     if (c.fetchone()[0] == 1):
         print("Table exists.")
     else:
-        c.execute('''CREATE TABLE login (username text, pwd text)''')
+        c.execute('''CREATE TABLE login (username text, pwd text, photo_path text)''')
         conn.commit()
 
 def validify_name(name):
@@ -33,7 +39,7 @@ def validify_password(name, pwd):
         return False
 
 
-def registration(name, pwd):
+def registration(name, pwd, image):
     c.execute("SELECT rowid FROM login WHERE username = ?;", [name])
     data = c.fetchall()
 
@@ -41,13 +47,19 @@ def registration(name, pwd):
         print("Username does not exist")
         print("Creating new account...")
 
-        c.execute("INSERT INTO login VALUES (?,?)", [name, pwd])
+        c.execute("INSERT INTO login VALUES (?,?,?)", [name, pwd, image])
 
-        for row in c.execute('SELECT * FROM login'):
-            print(row)
+        #for row in c.execute('SELECT * FROM login'):
+           # print(row)
 
         conn.commit()
         return True
     else:
         print("Username do exist")
         return False
+
+def get_photo(name):
+
+    c.execute("SELECT photo_path FROM login WHERE username = ?;", (name,))
+    img = c.fetchone()[0]
+    return img
