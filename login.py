@@ -6,8 +6,8 @@ import cv2
 import face_confirm as fc
 import io
 from PIL import Image, ImageTk
-#
-image_prefix =  "./images/"#r"C:\\Users\\Tracy\\PycharmProjects\\NewHacks\\images\\"
+#"./images/"
+image_prefix = r"C:\\Users\\Tracy\\PycharmProjects\\NewHacks\\images\\"
 image_suffix = ".jpg"
 
 #create a database for the app
@@ -76,7 +76,7 @@ def register():
             image = cv2.resize(image, (512, 256 + 128))
 
             face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-            gray = cv2.cvtColor(image)#, cv2.COLOR_BGR2GRAY)
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             # Detect faces
             faces = face_cascade.detectMultiScale(gray, 1.1, 4)
 

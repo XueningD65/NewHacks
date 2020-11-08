@@ -28,7 +28,7 @@ def return_euclidean_distance(feature_1, feature_2):
 def test_face(img_real, img_db, name):
     dets = detector(img_real, 1)
     dets_fm = detector(img_db, 1)
-    if len(dets) != 0:
+    if len(dets) != 0 and len(dets_fm) != 0:
         shape = predictor(img_real, dets[0])
         features_cap = facerec.compute_face_descriptor(img_real, shape)
 
