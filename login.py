@@ -6,8 +6,8 @@ import cv2
 import face_confirm as fc
 import io
 from PIL import Image, ImageTk
-
-image_prefix = r"C:\\Users\\Tracy\\PycharmProjects\\NewHacks\\images\\"
+#"./images/"
+image_prefix =  r"C:\\Users\\Tracy\\PycharmProjects\\NewHacks\\images\\"
 image_suffix = ".jpg"
 
 #create a database for the app
@@ -45,7 +45,7 @@ def register():
         if(len(path)>0):
             global image
             image = cv2.imread(path)
-            #image = cv2.resize(image, (512,256+128))
+            image = cv2.resize(image, (512,256+128))
 
             face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -122,13 +122,16 @@ def register():
         e_name = entry_name.get()
         e_pwd = entry_pwd.get()
         e_confirm = entry_confirm.get()
+        e_identity = new_id.get()
+        print("identity is ",e_identity)
+
         if(e_pwd != e_confirm):
             tkinter.messagebox.showwarning(title='Register info', message='Password does not match\nPlease enter again')
         else:
             img_path = image_prefix + e_name + image_suffix
             cv2.imwrite(img_path, image)
 
-            if(sl.registration(e_name, e_pwd, img_path)):
+            if(sl.registration(e_name, e_pwd, img_path, e_identity)):
                 tkinter.messagebox.showinfo(title='Register info', message='Succesfully registered.\nPlease login')
                 reg_window.destroy()
                 return
@@ -169,9 +172,17 @@ def register():
     button_take = tk.Button(reg_window, text = "Take now", width = 10, command = take_picture)
     button_take.grid(row=3, column=2, padx=10, pady=5)
 
-    b_1 = tk.Button(reg_window, text="Sign Up", width=10, command=info_check).grid(row=4, column=0, sticky=tk.W, padx=10,
+    new_id = tk.StringVar(reg_window)
+    label_identity = tk.Label(reg_window, text="Select Your Identity").grid(row=4, column=0)
+    choices = ['Teammate', 'Leader']
+    new_id.set('Teammate')
+
+    id_choice = tk.OptionMenu(reg_window, new_id, *choices)
+    id_choice.grid(row=4, column=1)
+
+    b_1 = tk.Button(reg_window, text="Sign Up", width=10, command=info_check).grid(row=5, column=0, sticky=tk.W, padx=10,
                                                                                  pady=5)
-    b_2 = tk.Button(reg_window, text="Reset", width=10, command=reset).grid(row=4, column=1, sticky=tk.E, padx=10,
+    b_2 = tk.Button(reg_window, text="Reset", width=10, command=reset).grid(row=5, column=1, sticky=tk.E, padx=10,
                                                                                   pady=5)
 
 

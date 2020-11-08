@@ -69,7 +69,7 @@ def create(name,login):
         # Draw the rectangle around each face
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            cv2.putText(frame, name, (x, y), font, 0.8, (255, 0, 255), 1, cv2.LINE_AA)
+            cv2.putText(frame, sl.get_identity(name)+" : " + name, (x, y), font, 0.8, (255, 0, 255), 1, cv2.LINE_AA)
 
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(cv2image)
@@ -84,12 +84,6 @@ def create(name,login):
         panelB.grid(row=0,column=1,padx=10,pady=5)
         panelB.configure(image = imgtk)
         panelB.after(1, draw_login)
-        '''else:
-            panelA.configure(image = db_image)
-            panelB.configure(image = imgtk)
-            panelA.image = db_image
-            panelB.imgtk = imgtk
-            panelB.after(1, show_frame())'''
 
         proceed = tk.Button(root, text="Confirm and Proceed", width=10, command=confirm)
         proceed.grid(row=1, column=0, padx=10, pady=5)

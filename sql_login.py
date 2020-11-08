@@ -48,7 +48,7 @@ def registration(name, pwd, image, identity):
         print("Creating new account...")
         for row in c.execute('SELECT * FROM login'):
             print(row)
-        c.execute("INSERT INTO login VALUES (?,?,?)", (name, pwd, image,identity))
+        c.execute("INSERT INTO login VALUES (?,?,?,?)", (name, pwd, image,identity))
 
         conn.commit()
         return True
