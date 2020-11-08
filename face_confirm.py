@@ -28,13 +28,18 @@ def return_euclidean_distance(feature_1, feature_2):
 def test_face(img_real, img_db, name):
     dets = detector(img_real, 1)
     dets_fm = detector(img_db, 1)
-    shape = predictor(img_real, dets[0])
-    features_cap = facerec.compute_face_descriptor(img_real, shape)
+    if len(dets) != 0:
+        shape = predictor(img_real, dets[0])
+        features_cap = facerec.compute_face_descriptor(img_real, shape)
 
-    shape = predictor(img_db, dets_fm[0])
-    features_formal = facerec.compute_face_descriptor(img_db, shape)
+        shape = predictor(img_db, dets_fm[0])
+        features_formal = facerec.compute_face_descriptor(img_db, shape)
+        compare = return_euclidean_distance(features_cap, features_formal)
+    else:
+        compare = "no human face"
+        print("Please put your face in the middle of the screen")
 
-    compare = return_euclidean_distance(features_cap, features_formal)
+
     if compare == "same":
         tk.messagebox.showinfo(title='face input', message='correct')
         print(strftime("%Y-%m-%d %H:%M:%S", localtime()) + " name " + name + "\r\n")
