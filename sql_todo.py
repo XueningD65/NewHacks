@@ -65,7 +65,7 @@ def get_data(name, src, colour, judge):
 
                 for row in f:
 
-                    c.execute("INSERT INTO task VALUES (?,?,?,?,?)", [new_name, curr_task, row[0], row[1], row[2]])
+                    c.execute("INSERT INTO task VALUES (?,?,?,?,?)", [new_name, curr_task, "Shared by "+name+" : "+row[0], row[1], row[2]])
 
                 for row in c.execute("SELECT * FROM task"):
                     print(row)
