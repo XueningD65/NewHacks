@@ -51,7 +51,10 @@ def test_face(img_real, img_db, name):
 def create(name,login):
     def confirm():
         cap.release()
-        tp.create(name, root)
+        if sl.get_identity(name) == "Leader":
+            tp.create_leader(name, root)
+        else:
+            tp.create(name, root)
 
     def draw_login():
         image = sl.get_photo(name)
