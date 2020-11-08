@@ -46,11 +46,11 @@ def registration(name, pwd, image):
     if (len(data) == 0):
         print("Username does not exist")
         print("Creating new account...")
+        for row in c.execute('SELECT * FROM login'):
+            print(row)
+        c.execute("INSERT INTO login VALUES (?,?,?)", (name, pwd, image))
 
-        c.execute("INSERT INTO login VALUES (?,?,?)", [name, pwd, image])
 
-        #for row in c.execute('SELECT * FROM login'):
-           # print(row)
 
         conn.commit()
         return True
@@ -62,4 +62,5 @@ def get_photo(name):
 
     c.execute("SELECT photo_path FROM login WHERE username = ?;", (name,))
     img = c.fetchone()[0]
+    #print(img)
     return img

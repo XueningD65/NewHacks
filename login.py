@@ -7,7 +7,7 @@ import face_confirm as fc
 import io
 from PIL import Image, ImageTk
 
-image_prefix = "./images/"
+image_prefix = r"C:\\Users\\Tracy\\PycharmProjects\\NewHacks\\images\\"
 image_suffix = ".jpg"
 
 #create a database for the app
@@ -45,12 +45,32 @@ def register():
         if(len(path)>0):
             global image
             image = cv2.imread(path)
-            image = cv2.resize(image, (512,256+128))
+            #image = cv2.resize(image, (512,256+128))
+
+            face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            # Detect faces
+            faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+            run = 0
+            for (x, y, w, h) in faces:
+                run = run+1
+            # Display the output
+            cv2.imshow('Press any key to confirm', image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            #photo_window.destroy()
+
+            if run==0:
+                print("Error! No human face recognized!")
+                tkinter.messagebox.showwarning(parent=reg_window, title='Photo warning', message='No human face detected! Please retake a photo!')
+
 
     def take_picture():
         def confirm_photo():
             _,pic = cap.read()
             cap.release()
+            cv2.destroyAllWindows()
             global image
             image = pic
             image = cv2.resize(image, (512, 256 + 128))
@@ -88,7 +108,7 @@ def register():
 
         photo_window = tk.Toplevel(reg_window)
         width, height = 80, 60
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         lmain = tk.Label(photo_window)
