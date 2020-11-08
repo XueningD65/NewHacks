@@ -16,6 +16,8 @@ def create(name,login):
 
         image = sl.get_photo(name)
         image = cv2.imread(image)
+        image = cv2.resize(image, (512, 256 + 128))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(image)
         image = ImageTk.PhotoImage(image)
 
@@ -24,6 +26,7 @@ def create(name,login):
 
         _, frame = cap.read()
         frame = cv2.flip(frame, 1)
+        frame = cv2.resize(frame, (512,256+128))
 
         # Convert to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -33,7 +36,7 @@ def create(name,login):
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-        cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+        cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(cv2image)
         imgtk = ImageTk.PhotoImage(image=img)
 

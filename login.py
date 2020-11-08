@@ -45,7 +45,40 @@ def register():
         if(len(path)>0):
             global image
             image = cv2.imread(path)
-            image = cv2.resize(image, (256,256))
+            image = cv2.resize(image, (512,256+128))
+
+    def take_picture():
+        def confirm_photo():
+            _,pic = cap.read()
+            cap.release()
+            global image
+            image = pic
+            image = cv2.resize(image, (512, 256 + 128))
+            photo_window.destroy()
+
+        def show_frame():
+            _, frame = cap.read()
+            frame = cv2.flip(frame, 1)
+            frame = cv2.resize(frame, (512, 256 + 128))
+            cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+            img = Image.fromarray(cv2image)
+            imgtk = ImageTk.PhotoImage(image=img)
+
+            lmain.imgtk = imgtk
+            lmain.configure(image=imgtk)
+            lmain.after(5, show_frame)
+
+        photo_window = tk.Toplevel(reg_window)
+        width, height = 80, 60
+        cap = cv2.VideoCapture(0)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+        lmain = tk.Label(photo_window)
+        lmain.grid(row=0, column=0, padx=10, pady=5)
+        show_frame()
+        confirm__photo = tk.Button(photo_window,text="Confirm",width=10,command=confirm_photo)
+        confirm__photo.grid(row=1, column=0, padx=10, pady=5)
+
 
     def info_check():
         e_name = entry_name.get()
@@ -95,7 +128,7 @@ def register():
     label_photo = tk.Label(reg_window, text="Add a photo").grid(row=3, column=0)
     button_upload = tk.Button(reg_window, text = "Upload a photo", width = 10, command = upload_image)
     button_upload.grid(row=3,column=1, padx=10,pady=5)
-    button_take = tk.Button(reg_window, text = "Take now", width = 10, command = upload_image)
+    button_take = tk.Button(reg_window, text = "Take now", width = 10, command = take_picture)
     button_take.grid(row=3, column=2, padx=10, pady=5)
 
     b_1 = tk.Button(reg_window, text="Sign Up", width=10, command=info_check).grid(row=4, column=0, sticky=tk.W, padx=10,
