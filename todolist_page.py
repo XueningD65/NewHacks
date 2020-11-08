@@ -3,6 +3,7 @@ from tkinter import colorchooser as cc
 import calendar
 from datetime import date
 import sql_todo as st
+import sql_login as sl
 
 st.new_data()
 printed_todo = False
@@ -109,6 +110,9 @@ def create(name,login):
     login.destroy()
     main_page.title("To do list")
     main_page.geometry('512x400')
+
+    sl.get_leader_name()
+    sl.get_teammate_name()
 
     tk.Button(main_page, text="Add new To-Do", command=add_new).grid(row=0, column=0)
     tk.Button(main_page, text="Print all To-Dos", command=print_todo).grid(row=1, column=0)

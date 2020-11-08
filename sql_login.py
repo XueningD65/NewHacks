@@ -69,15 +69,15 @@ def get_identity(name):
     return id
 
 def get_teammate_name():
-    for row in c.execute("SELECT name FROM login WHERE identity = ?;", ("teammate",)):
-        print(row)
+    for row in c.execute("SELECT username FROM login WHERE identity = ?;", ('Teammate',)):
+        print(row[0])
 
     # print(img)
-    return c.fetchall()
+    #return c.fetchall()
 
 def get_leader_name():
-    for row in c.execute("SELECT name FROM login WHERE identity = ?;", ("leader",)):
-        print(row)
+    for row in c.execute("SELECT username FROM login WHERE identity = ?;", ("Leader",)):
+        print(row[0])
 
     # print(img)
-    return c.fetchall()
+    #return c.fetchall()
